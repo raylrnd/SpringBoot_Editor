@@ -1,69 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Edit</title>
-    <link rel="stylesheet" th:href="@{/editormd/css/editormd.min.css}"
-          href="/editormd/css/editormd.min.css"/>
-</head>
-<body>
-<div>
-    <input type="text" name="title" style="width: 500px" id="title"/>
-    <input type="submit" title="发布" id="submitBtn" />
-</div>
-<!--class="editormd"-->
-<div  id="test-editormd">
-    <textarea  style="display:none;" name="test-editormd-markdown-doc" id="content"></textarea>
-    <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
-    <textarea class="editormd-html-textarea" name="text" id="htmlContent"></textarea>
-</div>
-<script th:src="@{/js/jquery.min.js}" src="/js/jquery.min.js"></script>
-<script th:src="@{/editormd/editormd.min.js}" src="/editormd/editormd.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-        editormd("test-editormd", {
-            width: "1000px",
-            height: 640,
-            syncScrolling : "single",
-            //你的lib目录的路径，我这边用JSP做测试的
-            tocm : true, // Using [TOCM]
-            tex : true, // 开启科学公式TeX语言支持，默认关闭
-            flowChart : true, // 开启流程图支持，默认关闭
-            path    : "/editormd/lib/",
-            //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
-            saveHTMLToTextarea : true,
-            imageUpload : true,
-            imageFormats : [ "jpg", "jpeg", "gif", "png", "bmp", "webp" ],
-            imageUploadURL : "/uploadimg",
-            onload: function () {
-                this.width("100%");
-                this.height(480);
-            }
-        });
-        $("#submitBtn").click(
-            function () {
-                submitblog();
-            }
-        )
-        function submitblog() {
-            var  title = $("#title").val();
-            var content = $("#content").val();
-            var htmlContent = $("#htmlContent").val();
-            $.ajax({
-                url: "submit",
-                data: {title: title, content:content,htmlContent:htmlContent},
-                success:function () {
-                    alert("发布成功");
-                },
-                error:function () {
-                    alert("发布失败");
-                }
-            })
-        }
-    });
-</script>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <title>Simple example - Editor.md examples</title>
+        <link rel="stylesheet" href="/editormd/css/editormd.css" />
+        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+    </head>
+    <body>
+        <div id="layout">
+            <header>
+                <h1>Simple example</h1>
+            </header>
+            <div id="test-editormd">
+                <textarea style="display:none;">[TOC]
 
-</body>
+#### Disabled options
+
+- TeX (Based on KaTeX);
+- Emoji;
+- Task lists;
+- HTML tags decode;
+- Flowchart and Sequence Diagram;
+
+#### Editor.md directory
+
+    editor.md/
+            lib/
+            css/
+            scss/
+            tests/
+            fonts/
+            images/
+            plugins/
+            examples/
+            languages/     
+            editormd.js
+            ...
+
+```html
+&lt;!-- English --&gt;
+&lt;script src="../dist/js/languages/en.js"&gt;&lt;/script&gt;
+
+&lt;!-- 繁體中文 --&gt;
+&lt;script src="../dist/js/languages/zh-tw.js"&gt;&lt;/script&gt;
+```
+</textarea>
+            </div>
+        </div>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/editormd/editormd.min.js"></script>
+        <script type="text/javascript">
+			var testEditor;
+
+            $(function() {
+                testEditor = editormd("test-editormd", {
+                    width   : "90%",
+                    height  : 640,
+                    syncScrolling : "single",
+                    path    : "/editormd/lib/"
+                });
+                
+                /*
+                // or
+                testEditor = editormd({
+                    id      : "test-editormd",
+                    width   : "90%",
+                    height  : 640,
+                    path    : "../lib/"
+                });
+                */
+            });
+        </script>
+    </body>
 </html>
